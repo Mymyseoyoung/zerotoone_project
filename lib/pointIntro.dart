@@ -22,24 +22,12 @@ class Pointintro extends StatelessWidget {
                 children: [
                   // 큰 이미지
                   Image.asset(
-                    'assets/images/point_big.png',
-                    width: size.width * 0.7, // 큰 이미지 크기
-                    height: size.width * 0.7,
+                    'assets/images/point_bigsmall.png',
+                    width: size.width * 0.9, // 큰 이미지 크기
+                    height: size.width * 0.9,
                     fit: BoxFit.contain,
                   ),
                   // 오른쪽 이미지를 아래로 이동시키기 위한 Column
-
-                  Column(
-                    children: [
-                      SizedBox(height: size.width * 0.25), // 위쪽 간격 조정
-                      Image.asset(
-                        'assets/images/point_small.png',
-                        width: size.width * 0.3, // 오른쪽 이미지 크기
-                        height: size.width * 0.3,
-                        fit: BoxFit.contain,
-                      ),
-                    ],
-                  ),
                 ],
               ),
               const SizedBox(height: 24),
