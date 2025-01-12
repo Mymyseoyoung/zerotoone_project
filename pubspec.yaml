@@ -34,6 +34,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  fluttertoast: ^8.2.10
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +82,11 @@ flutter:
     - family: apple
       fonts:
         - asset: assets/fonts/Mungyeong-Gamhong-Apple.otf
+    - family: Pretendard
+      fonts: 
+        - asset: assets/fonts/Pretendard-Bold.otf
+        - asset: assets/fonts/Pretendard-Light.otf   
+        - asset: assets/fonts/Pretendard-Regular.otf
   # fonts:
   #   - family: Schyler
   #     fonts:
