@@ -15,26 +15,30 @@ class Pointintro extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 50), // 상단 여백
-              // Stack을 사용하여 큰 이미지와 작은 이미지 겹치기
-              Stack(
+              // Row를 사용하여 큰 이미지와 오른쪽 이미지 배치
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // 큰 이미지Po
+                  // 큰 이미지
                   Image.asset(
                     'assets/images/point_big.png',
-                    width: size.width * 0.7,
+                    width: size.width * 0.7, // 큰 이미지 크기
                     height: size.width * 0.7,
                     fit: BoxFit.contain,
                   ),
-                  // 작은 이미지
-                  Positioned(
-                    right: size.width * 0.05, // 오른쪽 여백
-                    bottom: size.width * 0.05, // 아래쪽 여백
-                    child: Image.asset(
-                      'assets/images/point_small.png',
-                      width: size.width * 0.2, // 작은 이미지 크기
-                      height: size.width * 0.2,
-                      fit: BoxFit.contain,
-                    ),
+                  // 오른쪽 이미지를 아래로 이동시키기 위한 Column
+
+                  Column(
+                    children: [
+                      SizedBox(height: size.width * 0.25), // 위쪽 간격 조정
+                      Image.asset(
+                        'assets/images/point_small.png',
+                        width: size.width * 0.3, // 오른쪽 이미지 크기
+                        height: size.width * 0.3,
+                        fit: BoxFit.contain,
+                      ),
+                    ],
                   ),
                 ],
               ),
