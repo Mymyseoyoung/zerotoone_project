@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "pointintro.dart";
 
 class DumongIntro extends StatelessWidget {
   const DumongIntro({super.key});
@@ -6,6 +7,13 @@ class DumongIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    Future.delayed(const Duration(seconds: 5), () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const Pointintro()),
+      );
+    });
 
     return SingleChildScrollView(
       child: Column(
@@ -108,64 +116,7 @@ class DumongIntro extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          Frame29(size: size),
         ],
-      ),
-    );
-  }
-}
-
-class Frame29 extends StatelessWidget {
-  final Size size;
-
-  const Frame29({required this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-      child: Container(
-        width: size.width,
-        height: size.height * 0.1,
-        padding: EdgeInsets.symmetric(
-          horizontal: size.width * 0.1,
-          vertical: size.height * 0.02,
-        ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment(0.00, -1.00),
-            end: Alignment(0, 1),
-            colors: [
-              Colors.white.withOpacity(0),
-              Colors.white.withOpacity(0.53),
-              Colors.white
-            ],
-          ),
-        ),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFFFF5C35), // 수정된 부분
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(17),
-            ),
-          ),
-          onPressed: () {
-            // 버튼 동작 추가
-          },
-          child: Text(
-            '나만의 두몽이 만나기',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: size.width * 0.045,
-              fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w600,
-              height: 1.40,
-              letterSpacing: -0.59,
-              decoration: TextDecoration.none,
-            ),
-          ),
-        ),
       ),
     );
   }
