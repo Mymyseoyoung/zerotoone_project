@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'animalpick.dart'; // animalpick 위젯 파일 임포트
 
 class Pointintro extends StatelessWidget {
   const Pointintro({super.key});
@@ -27,7 +28,6 @@ class Pointintro extends StatelessWidget {
                     height: size.width * 0.9,
                     fit: BoxFit.contain,
                   ),
-                  // 오른쪽 이미지를 아래로 이동시키기 위한 Column
                 ],
               ),
               const SizedBox(height: 24),
@@ -107,7 +107,12 @@ class Frame29 extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            // 버튼 동작 추가
+            // animalpick 위젯으로 이동
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AnimalPick()), // AnimalPick으로 이동
+            );
           },
           child: Text(
             '나만의 두몽이 만나기',
