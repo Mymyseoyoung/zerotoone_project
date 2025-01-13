@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'mbti1.dart'; // Mbti1 import 추가
 import 'mbti3.dart';
 
 class Mbti2 extends StatefulWidget {
@@ -47,7 +48,7 @@ class _MBTIState extends State<Mbti2> {
               ),
               const SizedBox(height: 30),
               Text(
-                '동료가 열심히 해도 성과가 \n안 난다며 고민 상담을 시작합니다. \n고민을 들은 당신은 어떤 답변을 줄까요요?',
+                '동료가 열심히 해도 성과가 \n안 난다며 고민 상담을 시작합니다. \n고민을 들은 당신은 어떤 답변을 줄까요?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
@@ -70,9 +71,37 @@ class _MBTIState extends State<Mbti2> {
                   letterSpacing: -0.50,
                 ),
               ),
-              const SizedBox(height: 8),
-              Rectangle4439(),
               const SizedBox(height: 16),
+              // 뒤로가기 버튼과 바를 텍스트와 이모지 사이에 배치
+              Row(
+                mainAxisSize: MainAxisSize.min, // Row 크기 최소화
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Mbti1()),
+                      );
+                    },
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xFFF3F4F6), // 버튼 배경색
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back, // 왼쪽 화살표 아이콘
+                        color: Color(0xFFB0B0B0), // 아이콘 색상
+                        size: 20,
+                      ),
+                    ),
+                  ), // 버튼 추가
+                  const SizedBox(width: 8), // 버튼과 바 사이 간격
+                  Rectangle4439(),
+                ],
+              ),
+              const SizedBox(height: 8), // 버튼-바와 이모지 사이 간격 조정
               Container(
                 width: 88,
                 height: 88,
@@ -150,7 +179,7 @@ class _MBTIState extends State<Mbti2> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
-                        '열심히 하는데 안 풀리는 것만큼 속상한 게 없죠..ㅠ \n누구보다 열심히 하시니 꼭 웃을 날이 올 거예요!',
+                        '열심히 하는데 안 풀리는 것만큼 속상한 게 없죠.. \n누구보다 열심히 하시니 꼭 웃을 날이 올 거예요!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,

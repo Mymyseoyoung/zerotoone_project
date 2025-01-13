@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'dumongname.dart';
+import 'dumongname.dart'; // Mbti4 import 추가
+import 'mbti3.dart';
 
 class Mbti4 extends StatefulWidget {
   const Mbti4({Key? key}) : super(key: key);
 
   @override
-  _MBTIState createState() => _MBTIState();
+  _Mbti4State createState() => _Mbti4State(); // State 클래스 이름 수정
 }
 
-class _MBTIState extends State<Mbti4> {
+class _Mbti4State extends State<Mbti4> {
+  // State 클래스 이름 수정
   int selectedOption = -1;
 
   @override
@@ -47,7 +49,7 @@ class _MBTIState extends State<Mbti4> {
               ),
               const SizedBox(height: 30),
               Text(
-                '업무를 진행하던 당신에게 갑작스럽게 \n당신을 찾는 고객과의 미팅이 마련됩니다. \n이때 당신은 무슨 생각을 할까요?',
+                '업무를 진행하던 당신에게 갑작스럽게\n당신을 찾는 고객과의 미팅이 마련됩니다.\n이때 당신은 무슨 생각을 할까요?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
@@ -58,7 +60,7 @@ class _MBTIState extends State<Mbti4> {
                   letterSpacing: -0.70,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               const Text(
                 '4 / 4',
                 style: TextStyle(
@@ -71,8 +73,35 @@ class _MBTIState extends State<Mbti4> {
                 ),
               ),
               const SizedBox(height: 8),
-              Rectangle4439(),
-              const SizedBox(height: 16),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Mbti3()),
+                      );
+                    },
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xFFF3F4F6),
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Color(0xFFB0B0B0),
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Rectangle4439(),
+                ],
+              ),
+              const SizedBox(height: 8),
               Container(
                 width: 88,
                 height: 88,
@@ -86,6 +115,7 @@ class _MBTIState extends State<Mbti4> {
               const SizedBox(height: 30),
               Column(
                 children: [
+                  // 첫 번째 멘트
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -111,7 +141,7 @@ class _MBTIState extends State<Mbti4> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
-                        '윽! 저 미팅 때문에 오늘 계획해둔 \n 모든 업무가 망가질 거야..너무 싫어!',
+                        '욱! 저 미팅 때문에 오늘 계획해둔\n모든 업무가 망가질 거야.. 너무 싫어!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -125,6 +155,7 @@ class _MBTIState extends State<Mbti4> {
                     ),
                   ),
                   const SizedBox(height: 29),
+                  // 두 번째 멘트
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -150,7 +181,7 @@ class _MBTIState extends State<Mbti4> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
-                        '더 좋은 기회가 생기는 거니까 완전 럭키비키잖아? \n오늘 할 일은 내일 해도 되니까.. 미팅 수락!',
+                        '더 좋은 기회가 생기는 거니까 완전 럭키비기잖아?\n오늘 할 일은 내일 해도 되니까.. 미팅 수락!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -192,7 +223,7 @@ class Rectangle4439 extends StatelessWidget {
         Positioned(
           left: 0,
           child: Container(
-            width: 114,
+            width: 85.5,
             height: 4,
             decoration: ShapeDecoration(
               color: Color(0xFFFF5C35),

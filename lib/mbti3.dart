@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'mbti4.dart';
+import 'mbti4.dart'; // Mbti4 import 추가
+import 'mbti2.dart';
 
 class Mbti3 extends StatefulWidget {
   const Mbti3({Key? key}) : super(key: key);
 
   @override
-  _MBTIState createState() => _MBTIState();
+  _Mbti3State createState() => _Mbti3State(); // State 클래스 이름 수정
 }
 
-class _MBTIState extends State<Mbti3> {
+class _Mbti3State extends State<Mbti3> {
+  // State 클래스 이름 수정
   int selectedOption = -1;
 
   @override
@@ -47,7 +49,7 @@ class _MBTIState extends State<Mbti3> {
               ),
               const SizedBox(height: 30),
               Text(
-                '몇 주에 걸쳐 준비한 프로젝트의 \n발표를 담당하게 됐습니다. \n발표 3시간 전 어떤 생각이 있을까요요?',
+                '몇 주에 걸쳐 준비한 프로젝트의\n발표를 담당하게 됐습니다.\n발표 3시간 전 어떤 생각이 있을까요?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
@@ -58,7 +60,7 @@ class _MBTIState extends State<Mbti3> {
                   letterSpacing: -0.70,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               const Text(
                 '3 / 4',
                 style: TextStyle(
@@ -71,8 +73,35 @@ class _MBTIState extends State<Mbti3> {
                 ),
               ),
               const SizedBox(height: 8),
-              Rectangle4439(),
-              const SizedBox(height: 16),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Mbti2()),
+                      );
+                    },
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xFFF3F4F6),
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Color(0xFFB0B0B0),
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Rectangle4439(),
+                ],
+              ),
+              const SizedBox(height: 8),
               Container(
                 width: 88,
                 height: 88,
@@ -89,7 +118,7 @@ class _MBTIState extends State<Mbti3> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedOption = 0;
+                        selectedOption = 1;
                       });
                       Navigator.push(
                         context,
@@ -103,7 +132,7 @@ class _MBTIState extends State<Mbti3> {
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFF7F5),
                         border: Border.all(
-                          color: selectedOption == 0
+                          color: selectedOption == 1
                               ? const Color(0xFFFF5C35)
                               : Colors.transparent,
                           width: 2,
@@ -111,7 +140,7 @@ class _MBTIState extends State<Mbti3> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
-                        '나가면서 선에 걸려 넘어지면 어떡하지? \n만약에 말실수를 한다면 어떻게 되는 걸까?',
+                        '내가 가장 헷갈렸던 부분이 어디더라?\n떨지 말고 그 부분 다시 확인해야겠다.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -128,7 +157,7 @@ class _MBTIState extends State<Mbti3> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedOption = 1;
+                        selectedOption = 0;
                       });
                       Navigator.push(
                         context,
@@ -142,7 +171,7 @@ class _MBTIState extends State<Mbti3> {
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFF8F6),
                         border: Border.all(
-                          color: selectedOption == 1
+                          color: selectedOption == 0
                               ? const Color(0xFFFF5C35)
                               : Colors.transparent,
                           width: 2,
@@ -150,7 +179,7 @@ class _MBTIState extends State<Mbti3> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
-                        '내가 가장 헷갈렸던 부분이 어디더라? \n떨지 말고 그 부분 다시 확인해야겠다.',
+                        '내가면서 선에 걸려 넘어지면 어떡하지?\n만약에 말실수를 한다면 어떻게 되는 걸까?',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
