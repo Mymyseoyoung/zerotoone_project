@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'mbti1.dart';
 
 class AnimalPick extends StatefulWidget {
   const AnimalPick({super.key});
@@ -24,35 +25,37 @@ class _AnimalPickState extends State<AnimalPick> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: size.height * 0.05), // 상단 여백
-            Text(
-              '두몽이 만들기',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: size.width * 0.055,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Pretendard',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: size.height * 0.05), // 상단 여백
+              Text(
+                '두몽이 만들기',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: size.width * 0.055,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Pretendard',
+                ),
               ),
-            ),
-            SizedBox(height: size.height * 0.02),
-            Text(
-              '함께 할 두몽이 종류를 골라볼까요?',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: size.width * 0.045,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w400,
-                height: 1.2,
+              SizedBox(height: size.height * 0.02),
+              Text(
+                '함께 할 두몽이 종류를 골라볼까요?',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: size.width * 0.045,
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w400,
+                  height: 1.2,
+                ),
               ),
-            ),
-            SizedBox(height: size.height * 0.03),
-            Expanded(
-              child: GridView.builder(
+              SizedBox(height: size.height * 0.03),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: 6,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -78,49 +81,54 @@ class _AnimalPickState extends State<AnimalPick> {
                   }
                 },
               ),
-            ),
-            ElevatedButton(
-              onPressed: selectedAnimalIndex != null
-                  ? () {
-                      // 선택하기 버튼 클릭 시 동작
-                      print("${animals[selectedAnimalIndex!]} 선택됨");
-                    }
-                  : null, // 선택이 없으면 비활성화
-              style: ElevatedButton.styleFrom(
-                backgroundColor: selectedAnimalIndex != null
-                    ? const Color(0xFFFF5C35)
-                    : Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(17),
-                  side: BorderSide(
-                    color: selectedAnimalIndex != null
-                        ? const Color(0xFFFF5C35)
-                        : const Color(0xFFAEAEAE),
-                    width: 2,
+              SizedBox(height: size.height * 0.03),
+              ElevatedButton(
+                onPressed: selectedAnimalIndex != null
+                    ? () {
+                        // 선택하기 버튼 클릭 시 동작
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Mbti1()),
+                        );
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: selectedAnimalIndex != null
+                      ? const Color(0xFFFF5C35)
+                      : Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(17),
+                    side: BorderSide(
+                      color: selectedAnimalIndex != null
+                          ? const Color(0xFFFF5C35)
+                          : const Color(0xFFAEAEAE),
+                      width: 2,
+                    ),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
+                ),
+                child: Center(
+                  child: Text(
+                    selectedAnimalIndex != null
+                        ? '${animals[selectedAnimalIndex!]} 선택하기'
+                        : '선택하기',
+                    style: TextStyle(
+                      color: selectedAnimalIndex != null
+                          ? Colors.white
+                          : const Color(0xFF696969),
+                      fontSize: size.width * 0.045,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                      height: 1.4,
+                      letterSpacing: -0.56,
+                    ),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
               ),
-              child: Center(
-                child: Text(
-                  selectedAnimalIndex != null
-                      ? '${animals[selectedAnimalIndex!]} 선택하기'
-                      : '선택하기',
-                  style: TextStyle(
-                    color: selectedAnimalIndex != null
-                        ? Colors.white
-                        : const Color(0xFF696969),
-                    fontSize: size.width * 0.045,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w500,
-                    height: 1.4,
-                    letterSpacing: -0.56,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: size.height * 0.02),
-          ],
+              SizedBox(height: size.height * 0.02),
+            ],
+          ),
         ),
       ),
     );
@@ -175,13 +183,27 @@ class AnimalCard extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               SizedBox(height: size.height * 0.01),
-              Text(
-                name,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: size.width * 0.04,
-                  fontWeight: FontWeight.w500,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: size.width * 0.04,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  if (isSelected) // 선택된 경우에만 네모 체크 아이콘 표시
+                    Padding(
+                      padding: EdgeInsets.only(left: size.width * 0.02),
+                      child: Icon(
+                        Icons.check_box,
+                        color: const Color(0xFFFF5C35),
+                        size: size.width * 0.05,
+                      ),
+                    ),
+                ],
               ),
             ],
           ),
