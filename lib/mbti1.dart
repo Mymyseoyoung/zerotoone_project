@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'mbtiprovider.dart'; // MbtiProvider import 추가
 import 'animalpick.dart'; // AnimalPick import 추가
 import 'mbti2.dart';
 
-class Mbti1 extends StatefulWidget {
+class Mbti1 extends StatelessWidget {
   const Mbti1({Key? key}) : super(key: key);
 
   @override
-  _MBTI1State createState() => _MBTI1State();
-}
-
-class _MBTI1State extends State<Mbti1> {
-  int selectedOption = -1;
-
-  @override
   Widget build(BuildContext context) {
+    final mbtiProvider = Provider.of<MbtiProvider>(context, listen: false);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -47,7 +44,7 @@ class _MBTI1State extends State<Mbti1> {
                 ),
               ),
               const SizedBox(height: 30),
-              Text(
+              const Text(
                 '내일은 드디어 주말..! \n일주일 동안 기다리고 기다리던 주말에 \n당신은 어떤 하루를 보낼 건가요?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -72,7 +69,7 @@ class _MBTI1State extends State<Mbti1> {
                 ),
               ),
               const SizedBox(height: 16),
-              // 뒤로가기 버튼과 바를 텍스트와 이모지 사이에 배치
+              // 뒤로가기 버튼과 진행 바
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -116,83 +113,33 @@ class _MBTI1State extends State<Mbti1> {
               const SizedBox(height: 30),
               Column(
                 children: [
-                  // 첫 번째 멘트
+                  // 첫 번째 선택지
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedOption = 0;
-                      });
+                      mbtiProvider.setAnswer(1, 'a'); // 'a' 저장
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const Mbti2()),
                       );
                     },
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 27, vertical: 16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF7F5),
-                        border: Border.all(
-                          color: selectedOption == 0
-                              ? const Color(0xFFFF5C35)
-                              : Colors.transparent,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Text(
-                        '집 밖으로 한 발자국도 안 나가야지!\n이번에 새로 나온 넷플릭스 보면서 뭐 시켜 먹지?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
-                          height: 1.40,
-                          letterSpacing: -0.56,
-                        ),
-                      ),
+                    child: _OptionContainer(
+                      isSelected: mbtiProvider.answer1 == 'a',
+                      text: '집 밖으로 한 발자국도 안 나가야지!\n이번에 새로 나온 넷플릭스 보면서 뭐 시켜 먹지?',
                     ),
                   ),
                   const SizedBox(height: 29),
-                  // 두 번째 멘트
+                  // 두 번째 선택지
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedOption = 1;
-                      });
+                      mbtiProvider.setAnswer(1, 'b'); // 'b' 저장
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const Mbti2()),
                       );
                     },
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 53, vertical: 16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF8F6),
-                        border: Border.all(
-                          color: selectedOption == 1
-                              ? const Color(0xFFFF5C35)
-                              : Colors.transparent,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Text(
-                        '당장 친구들한테 연락해야겠다.\n어디 쪽으로 나가면 좋을까, 홍대? 성수?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
-                          height: 1.40,
-                          letterSpacing: -0.56,
-                        ),
-                      ),
+                    child: _OptionContainer(
+                      isSelected: mbtiProvider.answer1 == 'b',
+                      text: '당장 친구들한테 연락해야겠다.\n어디 쪽으로 나가면 좋을까, 홍대? 성수?',
                     ),
                   ),
                 ],
@@ -216,9 +163,10 @@ class Rectangle4439 extends StatelessWidget {
           width: 114,
           height: 4,
           decoration: ShapeDecoration(
-            color: Color(0xFFF3F4F6),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
+            color: const Color(0xFFF3F4F6),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3),
+            ),
           ),
         ),
         Positioned(
@@ -227,13 +175,53 @@ class Rectangle4439 extends StatelessWidget {
             width: 28.50,
             height: 4,
             decoration: ShapeDecoration(
-              color: Color(0xFFFF5C35),
+              color: const Color(0xFFFF5C35),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(3)),
+                borderRadius: BorderRadius.circular(3),
+              ),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _OptionContainer extends StatelessWidget {
+  final bool isSelected;
+  final String text;
+
+  const _OptionContainer({
+    Key? key,
+    required this.isSelected,
+    required this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF7F5),
+        border: Border.all(
+          color: isSelected ? const Color(0xFFFF5C35) : Colors.transparent,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w500,
+          height: 1.40,
+          letterSpacing: -0.56,
+        ),
+      ),
     );
   }
 }
