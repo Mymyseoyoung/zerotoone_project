@@ -38,6 +38,7 @@ dependencies:
   collection: ^1.16.0
   provider: ^6.0.5
   http: ^1.2.2
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,11 @@ flutter:
   uses-material-design: true
   assets: 
     - assets/images/
+    - assets/icons/exp.svg
+    - assets/icons/calendar.svg
+    - assets/icons/home.svg
+    - assets/icons/ranking.svg
+    - assets/icons/categories.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
