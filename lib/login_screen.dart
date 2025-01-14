@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // SharedPreferences 추가
 import 'gsheet_service.dart'; // Google Sheets 데이터 가져오기
-
 import 'dumongintro.dart'; // 로그인 성공 후 이동할 화면
 
 class LogIn extends StatefulWidget {
@@ -17,10 +17,12 @@ class _LogInState extends State<LogIn> {
   final FocusNode _passwordFocusNode = FocusNode();
 
   bool _isLoading = false; // 로딩 상태 관리
+  bool _isCheckingLoginStatus = true; // 로그인 상태 체크 중 상태
 
   @override
   void initState() {
     super.initState();
+    _checkLoginStatus(); // 앱 시작 시 로그인 상태 체크
     _idFocusNode.addListener(() {
       setState(() {});
     });
@@ -48,8 +50,13 @@ class _LogInState extends State<LogIn> {
       final password = _passwordController.text.trim();
 
       if (users.containsKey(id) && users[id] == password) {
-        // 로그인 성공
-        Navigator.push(
+        // 로그인 성공 -> 상태를 로컬에 저장
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('userId', id);
+
+        // 로그인 성공 후 화면 이동
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => DumongIntro()),
         );
@@ -66,8 +73,37 @@ class _LogInState extends State<LogIn> {
     }
   }
 
+  // 앱 시작 시 로그인 상태 확인
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+    if (isLoggedIn) {
+      final userId = prefs.getString('userId') ?? '';
+      // 이미 로그인되어 있으면 로그인 화면을 건너뛰고 홈 화면으로 이동
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DumongIntro()),
+      );
+    } else {
+      // 로그인 상태 체크 후 화면을 계속 표시
+      setState(() {
+        _isCheckingLoginStatus = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_isCheckingLoginStatus) {
+      // 로그인 상태 체크 중이라면 로그인 화면만 보여줌
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
