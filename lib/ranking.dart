@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'animalpickprovider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RankingScreen extends StatelessWidget {
   const RankingScreen({Key? key}) : super(key: key);
@@ -40,7 +41,8 @@ class RankingScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      bottomNavigationBar: _buildBottomNavigationBar(2),
+      backgroundColor: Colors.white,
+      bottomNavigationBar: _buildBottomNavigationBar(context),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -58,7 +60,7 @@ class RankingScreen extends StatelessWidget {
               ),
               Column(
                 children: rankers.map((ranker) {
-                  return _buildRankerItem(ranker, size);
+                  return _buildRankerItem(context, ranker, size);
                 }).toList(),
               ),
             ],
@@ -68,7 +70,8 @@ class RankingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRankerItem(Map<String, dynamic> ranker, Size size) {
+  Widget _buildRankerItem(
+      BuildContext context, Map<String, dynamic> ranker, Size size) {
     bool isTop3 = ranker['rank'] <= 3;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -82,9 +85,23 @@ class RankingScreen extends StatelessWidget {
           padding: const EdgeInsets.all(12.0),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage(ranker['image']),
+              Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage(ranker['image']),
+                  ),
+                  if (ranker['rank'] == 1)
+                    Positioned(
+                      top: -8,
+                      right: -8,
+                      child: Image.asset(
+                        'assets/images/crown.png',
+                        width: 24,
+                        height: 24,
+                      ),
+                    ),
+                ],
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -115,6 +132,13 @@ class RankingScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              IconButton(
+                icon: const Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                ),
+                onPressed: () {},
+              ),
             ],
           ),
         ),
@@ -122,52 +146,58 @@ class RankingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavigationBar(int currentIndex) {
+  Widget _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
+      backgroundColor: Colors.white,
       type: BottomNavigationBarType.fixed,
-      currentIndex: currentIndex,
+      currentIndex: 3, // Ranking 화면이 선택된 상태
       selectedItemColor: const Color(0xFFFF5C35),
       unselectedItemColor: Colors.grey,
       onTap: (index) {
-        // TODO: 화면 이동 구현
+        if (index == 3) {
+          // 이미 Ranking 페이지이므로 아무 작업도 하지 않음
+          return;
+        }
+        // 다른 페이지로 이동해야 하는 경우
+        switch (index) {
+          case 0:
+            print("Exp 페이지로 이동");
+            break;
+          case 1:
+            print("Calendar 페이지로 이동");
+            break;
+          case 2:
+            print("Home 페이지로 이동");
+            break;
+          case 4:
+            print("Settings 페이지로 이동");
+            break;
+        }
       },
       items: [
         BottomNavigationBarItem(
-          icon: const Icon(Icons.home),
-          label: '홈',
+          icon: SvgPicture.asset('assets/icons/exp.svg', width: 24, height: 24),
+          label: 'exp',
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.search),
-          label: '검색',
+          icon: SvgPicture.asset('assets/icons/calendar.svg',
+              width: 24, height: 24),
+          label: 'calendar',
         ),
         BottomNavigationBarItem(
-          icon: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              const Icon(Icons.leaderboard),
-              Positioned(
-                bottom: -2,
-                left: 12,
-                child: Container(
-                  width: 6,
-                  height: 6,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFF5C35),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          label: '랭킹',
+          icon:
+              SvgPicture.asset('assets/icons/home.svg', width: 24, height: 24),
+          label: 'home',
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.notifications),
-          label: '알림',
+          icon: SvgPicture.asset('assets/icons/ranking.svg',
+              width: 24, height: 24),
+          label: 'ranking',
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.person),
-          label: '내 정보',
+          icon: SvgPicture.asset('assets/icons/categories.svg',
+              width: 24, height: 24),
+          label: 'settings',
         ),
       ],
     );

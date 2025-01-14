@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'mbtiprovider.dart'; // MbtiProvider import
 import 'welcomepage.dart'; // 첫 화면 Welcomepage import
+import 'animalpickprovider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => MbtiProvider(), // MBTI 상태 관리 객체 생성
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MbtiProvider()), // MBTI 상태 관리 객체
+        ChangeNotifierProvider(
+            create: (_) => AnimalPickProvider()), // AnimalPick 상태 관리 객체
+      ],
       child: const MyApp(),
     ),
   );

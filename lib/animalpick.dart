@@ -1,27 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'mbti1.dart';
+import 'animalpickprovider.dart'; // 방금 만든 provider
 
-class AnimalPick extends StatefulWidget {
+class AnimalPick extends StatelessWidget {
   const AnimalPick({super.key});
-
-  @override
-  State<AnimalPick> createState() => _AnimalPickState();
-}
-
-class _AnimalPickState extends State<AnimalPick> {
-  int? selectedAnimalIndex; // 선택된 동물 버튼의 인덱스
-  final animals = ['곰', '고양이', '강아지', '원숭이', '토끼']; // 동물 이름 목록
-  final images = [
-    'assets/images/bear.png',
-    'assets/images/cat.png',
-    'assets/images/dog.png',
-    'assets/images/monkey.png',
-    'assets/images/rabbit.png',
-  ]; // 동물 이미지 경로
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final provider = Provider.of<AnimalPickProvider>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -53,6 +41,7 @@ class _AnimalPickState extends State<AnimalPick> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              // provider의 animals.length만큼 그리드
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -64,16 +53,15 @@ class _AnimalPickState extends State<AnimalPick> {
                   childAspectRatio: 0.8,
                 ),
                 itemBuilder: (context, index) {
-                  if (index < animals.length) {
+                  if (index < provider.animals.length) {
                     return AnimalCard(
-                      name: animals[index],
-                      imagePath: images[index],
+                      name: provider.animals[index],
+                      imagePath: provider.images[index],
                       size: size,
-                      isSelected: selectedAnimalIndex == index,
+                      isSelected: provider.selectedIndex == index,
                       onPressed: () {
-                        setState(() {
-                          selectedAnimalIndex = index; // 선택된 버튼 인덱스 저장
-                        });
+                        // Provider로 상태 저장
+                        provider.selectAnimal(index);
                       },
                     );
                   } else {
@@ -83,7 +71,7 @@ class _AnimalPickState extends State<AnimalPick> {
               ),
               SizedBox(height: size.height * 0.03),
               ElevatedButton(
-                onPressed: selectedAnimalIndex != null
+                onPressed: provider.selectedIndex != null
                     ? () {
                         // 선택하기 버튼 클릭 시 동작
                         Navigator.push(
@@ -94,13 +82,13 @@ class _AnimalPickState extends State<AnimalPick> {
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: selectedAnimalIndex != null
+                  backgroundColor: provider.selectedIndex != null
                       ? const Color(0xFFFF5C35)
                       : Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(17),
                     side: BorderSide(
-                      color: selectedAnimalIndex != null
+                      color: provider.selectedIndex != null
                           ? const Color(0xFFFF5C35)
                           : const Color(0xFFAEAEAE),
                       width: 2,
@@ -110,11 +98,11 @@ class _AnimalPickState extends State<AnimalPick> {
                 ),
                 child: Center(
                   child: Text(
-                    selectedAnimalIndex != null
-                        ? '${animals[selectedAnimalIndex!]} 선택하기'
+                    provider.selectedIndex != null
+                        ? '${provider.animals[provider.selectedIndex!]} 선택하기'
                         : '선택하기',
                     style: TextStyle(
-                      color: selectedAnimalIndex != null
+                      color: provider.selectedIndex != null
                           ? Colors.white
                           : const Color(0xFF696969),
                       fontSize: size.width * 0.045,
@@ -135,6 +123,7 @@ class _AnimalPickState extends State<AnimalPick> {
   }
 }
 
+// AnimalCard, EmptyAnimalCard는 기존과 동일
 class AnimalCard extends StatelessWidget {
   final String name;
   final String imagePath;
@@ -194,7 +183,7 @@ class AnimalCard extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  if (isSelected) // 선택된 경우에만 네모 체크 아이콘 표시
+                  if (isSelected) // 선택된 경우에만 체크 아이콘 표시
                     Padding(
                       padding: EdgeInsets.only(left: size.width * 0.02),
                       child: Icon(
