@@ -10,6 +10,7 @@ class MbtiProvider with ChangeNotifier {
   String eggType = '';
   String eggImage = '';
 
+  String dumongName = '';
   void setAnswer(int questionNumber, String answer) {
     if (questionNumber == 1) answer1 = answer;
     if (questionNumber == 2) answer2 = answer;
@@ -25,6 +26,12 @@ class MbtiProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // 두몽이 이름 설정 메서드 추가
+  void setDumongName(String name) {
+    dumongName = name;
+    notifyListeners();
+  }
+
   String _determineMbti(List<String> answers) {
     final eq = ListEquality().equals; // ListEquality 객체 생성
 
@@ -32,19 +39,23 @@ class MbtiProvider with ChangeNotifier {
     if (eq(answers, ['b', 'b', 'a', 'a'])) return 'ENFJ';
     if (eq(answers, ['b', 'a', 'a', 'b'])) return 'ENTP';
     if (eq(answers, ['b', 'a', 'a', 'a'])) return 'ENTJ';
-    if (eq(answers, ['b', 'a', 'b', 'b'])) return 'ESTP';
+
     if (eq(answers, ['b', 'b', 'b', 'b'])) return 'ESFP';
+    if (eq(answers, ['b', 'a', 'b', 'b'])) return 'ESTP';
     if (eq(answers, ['b', 'a', 'b', 'a'])) return 'ESTJ';
     if (eq(answers, ['b', 'b', 'b', 'a'])) return 'ESFJ';
-    if (eq(answers, ['a', 'b', 'a', 'b'])) return 'INFP';
-    if (eq(answers, ['a', 'a', 'a', 'b'])) return 'INTP';
+
+    if (eq(answers, ['a', 'b', 'a', 'b'])) return 'INFP'; // abab
     if (eq(answers, ['a', 'b', 'a', 'a'])) return 'INFJ';
+    if (eq(answers, ['a', 'a', 'a', 'b'])) return 'INTP';
     if (eq(answers, ['a', 'a', 'a', 'a'])) return 'INTJ';
+
     if (eq(answers, ['a', 'b', 'b', 'b'])) return 'ISFP';
     if (eq(answers, ['a', 'a', 'b', 'b'])) return 'ISTP';
     if (eq(answers, ['a', 'b', 'b', 'a'])) return 'ISFJ';
     if (eq(answers, ['a', 'a', 'b', 'a'])) return 'ISTJ';
-    return ''; // 기본값 (매칭되지 않으면 빈 값)
+
+    return '';
   }
 
   void _assignEggTypeAndImage() {

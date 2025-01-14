@@ -115,6 +115,7 @@ class Mbti4 extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       mbtiProvider.setAnswer(4, 'a'); // 선택값 'a' 저장
+                      mbtiProvider.calculateMbti(); // 마지막에 MBTI 계산
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Dumongname()),
@@ -130,6 +131,7 @@ class Mbti4 extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       mbtiProvider.setAnswer(4, 'b'); // 선택값 'b' 저장
+                      mbtiProvider.calculateMbti(); // 마지막에 MBTI 계산
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Dumongname()),
