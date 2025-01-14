@@ -1,77 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'gsheet_service.dart';
 import 'animalpickprovider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-class RankingScreen extends StatelessWidget {
-  const RankingScreen({Key? key}) : super(key: key);
+class RankingScreen extends StatefulWidget {
+  const RankingScreen({super.key});
+
+  @override
+  _RankingScreenState createState() => _RankingScreenState();
+}
+
+class _RankingScreenState extends State<RankingScreen> {
+  List<Map<String, dynamic>> rankers = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final data = await GSheetService.fetchRankers();
+      setState(() {
+        rankers = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showError(e.toString());
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final animalPickProvider = Provider.of<AnimalPickProvider>(context);
 
-    final List<Map<String, dynamic>> rankers = [
-      {
-        'rank': 1,
-        'name': '김지수',
-        'exp': 44500,
-        'level': 'Lv. F2-Ⅱ',
-        'image': animalPickProvider.selectedAnimalImage ??
-            'assets/images/default.png',
-      },
-      {
-        'rank': 2,
-        'name': '허재민',
-        'exp': 43000,
-        'level': 'Lv. F2-Ⅰ',
-        'image': animalPickProvider.animals.length > 1
-            ? animalPickProvider.images[1]
-            : 'assets/images/default.png',
-      },
-      {
-        'rank': 3,
-        'name': '조선우',
-        'exp': 27690,
-        'level': 'Lv. F2-Ⅱ',
-        'image': animalPickProvider.animals.length > 2
-            ? animalPickProvider.images[2]
-            : 'assets/images/default.png',
-      },
-    ];
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: _buildBottomNavigationBar(context),
+      bottomNavigationBar: _buildBottomNavigationBar(2),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Ranking',
-                  style: TextStyle(
-                    fontSize: size.width * 0.07,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFFFF5C35),
-                  ),
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Ranking',
+                        style: TextStyle(
+                          fontSize: size.width * 0.07,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFFFF5C35),
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: rankers.map((ranker) {
+                        // 동물 이미지 설정
+                        final image = ranker['rank'] == 1
+                            ? (animalPickProvider.selectedAnimalImage ??
+                                'assets/images/default.png')
+                            : 'assets/images/default.png';
+
+                        return _buildRankerItem(
+                          {
+                            ...ranker,
+                            'image': image,
+                          },
+                          size,
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
-              Column(
-                children: rankers.map((ranker) {
-                  return _buildRankerItem(context, ranker, size);
-                }).toList(),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
 
-  Widget _buildRankerItem(
-      BuildContext context, Map<String, dynamic> ranker, Size size) {
+  Widget _buildRankerItem(Map<String, dynamic> ranker, Size size) {
     bool isTop3 = ranker['rank'] <= 3;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -85,23 +104,9 @@ class RankingScreen extends StatelessWidget {
           padding: const EdgeInsets.all(12.0),
           child: Row(
             children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: AssetImage(ranker['image']),
-                  ),
-                  if (ranker['rank'] == 1)
-                    Positioned(
-                      top: -8,
-                      right: -8,
-                      child: Image.asset(
-                        'assets/images/crown.png',
-                        width: 24,
-                        height: 24,
-                      ),
-                    ),
-                ],
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage(ranker['image']),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -132,13 +137,6 @@ class RankingScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(
-                  Icons.favorite,
-                  color: Colors.red,
-                ),
-                onPressed: () {},
-              ),
             ],
           ),
         ),
@@ -146,58 +144,35 @@ class RankingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavigationBar(BuildContext context) {
+  Widget _buildBottomNavigationBar(int currentIndex) {
     return BottomNavigationBar(
-      backgroundColor: Colors.white,
       type: BottomNavigationBarType.fixed,
-      currentIndex: 3, // Ranking 화면이 선택된 상태
+      currentIndex: currentIndex,
       selectedItemColor: const Color(0xFFFF5C35),
       unselectedItemColor: Colors.grey,
       onTap: (index) {
-        if (index == 3) {
-          // 이미 Ranking 페이지이므로 아무 작업도 하지 않음
-          return;
-        }
-        // 다른 페이지로 이동해야 하는 경우
-        switch (index) {
-          case 0:
-            print("Exp 페이지로 이동");
-            break;
-          case 1:
-            print("Calendar 페이지로 이동");
-            break;
-          case 2:
-            print("Home 페이지로 이동");
-            break;
-          case 4:
-            print("Settings 페이지로 이동");
-            break;
-        }
+        // TODO: 화면 이동 구현
       },
       items: [
         BottomNavigationBarItem(
-          icon: SvgPicture.asset('assets/icons/exp.svg', width: 24, height: 24),
-          label: 'exp',
+          icon: const Icon(Icons.home),
+          label: '홈',
         ),
         BottomNavigationBarItem(
-          icon: SvgPicture.asset('assets/icons/calendar.svg',
-              width: 24, height: 24),
-          label: 'calendar',
+          icon: const Icon(Icons.search),
+          label: '검색',
         ),
         BottomNavigationBarItem(
-          icon:
-              SvgPicture.asset('assets/icons/home.svg', width: 24, height: 24),
-          label: 'home',
+          icon: const Icon(Icons.leaderboard),
+          label: '랭킹',
         ),
         BottomNavigationBarItem(
-          icon: SvgPicture.asset('assets/icons/ranking.svg',
-              width: 24, height: 24),
-          label: 'ranking',
+          icon: const Icon(Icons.notifications),
+          label: '알림',
         ),
         BottomNavigationBarItem(
-          icon: SvgPicture.asset('assets/icons/categories.svg',
-              width: 24, height: 24),
-          label: 'settings',
+          icon: const Icon(Icons.person),
+          label: '내 정보',
         ),
       ],
     );
